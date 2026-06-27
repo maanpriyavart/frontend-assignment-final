@@ -10,7 +10,7 @@ export default function ProductDetails({ product }) {
       <div className="row">
         <div className="col-md-5 text-center">
           <img
-            src={product.image}
+            src={product.thumbnail}
             alt={product.title}
             className="img-fluid"
             style={{
@@ -32,7 +32,7 @@ export default function ProductDetails({ product }) {
           </h3>
 
           <p className="mt-3">
-            <strong>Rating:</strong> ⭐ {product.rating.rate}
+            <strong>Rating:</strong> ⭐ {product.rating}
           </p>
 
           <hr />
@@ -51,7 +51,7 @@ export async function getServerSideProps(context) {
     const { id } = context.params;
 
     const res = await fetch(
-      `https://fakestoreapi.com/products/${id}`
+      `https://dummyjson.com/products/${id}`
     );
 
     if (!res.ok) {

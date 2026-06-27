@@ -70,7 +70,7 @@ export default function Home({ products }) {
                         style={{ cursor: "pointer" }}
                       >
                         <img
-                          src={product.image}
+                          src={product.thumbnail}
                           alt={product.title}
                           className="card-img-top p-4"
                           style={{
@@ -137,17 +137,17 @@ export default function Home({ products }) {
 
 export async function getServerSideProps() {
   try {
-    const res = await fetch("https://fakestoreapi.com/products");
+    const res = await fetch("https://dummyjson.com/products?limit=20");
 
     if (!res.ok) {
       throw new Error(`HTTP Error: ${res.status}`);
     }
 
-    const products = await res.json();
+    const data = await res.json();
 
     return {
       props: {
-        products,
+        products: data.products,
       },
     };
   } catch (error) {
