@@ -3,13 +3,11 @@ import Link from "next/link";
 export default function ProductDetails({ product }) {
   return (
     <div className="container py-5">
-
       <Link href="/" className="btn btn-secondary mb-4">
         ← Back to Products
       </Link>
 
       <div className="row">
-
         <div className="col-md-5 text-center">
           <img
             src={product.image}
@@ -23,7 +21,6 @@ export default function ProductDetails({ product }) {
         </div>
 
         <div className="col-md-7">
-
           <h2>{product.title}</h2>
 
           <span className="badge bg-primary mb-3">
@@ -43,26 +40,38 @@ export default function ProductDetails({ product }) {
           <h5>Description</h5>
 
           <p>{product.description}</p>
-
         </div>
-
       </div>
     </div>
   );
 }
 
 export async function getServerSideProps(context) {
-  const { id } = context.params;
+  try {
+    const { id } = context.params;
 
-  const res = await fetch(
-    `https://fakestoreapi.com/products/${id}`
-  );
+    const res = await fetch(
+      `https://fakestoreapi.com/products/${id}`
+    );
 
-  const product = await res.json();
+    if (!res.ok) {
+      return {
+        notFound: true,
+      };
+    }
 
-  return {
-    props: {
-      product,
-    },
-  };
+    const product = await res.json();
+
+    return {
+      props: {
+        product,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching product:", error);
+
+    return {
+      notFound: true,
+    };
+  }
 }

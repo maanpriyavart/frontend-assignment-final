@@ -34,7 +34,9 @@ export default function Home({ products }) {
     indexOfLastProduct
   );
 
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const totalPages = Math.ceil(
+    filteredProducts.length / productsPerPage
+  );
 
   return (
     <>
@@ -93,7 +95,7 @@ export default function Home({ products }) {
                   </div>
                 ))
               ) : (
-                <div className="text-center mt-5">
+                <div className="col-12 text-center mt-5">
                   <h3>No Products Found</h3>
                 </div>
               )}
@@ -104,7 +106,9 @@ export default function Home({ products }) {
                 <button
                   className="btn btn-outline-primary"
                   disabled={currentPage === 1}
-                  onClick={() => setCurrentPage(currentPage - 1)}
+                  onClick={() =>
+                    setCurrentPage(currentPage - 1)
+                  }
                 >
                   Previous
                 </button>
@@ -116,7 +120,9 @@ export default function Home({ products }) {
                 <button
                   className="btn btn-outline-primary"
                   disabled={currentPage === totalPages}
-                  onClick={() => setCurrentPage(currentPage + 1)}
+                  onClick={() =>
+                    setCurrentPage(currentPage + 1)
+                  }
                 >
                   Next
                 </button>
@@ -133,29 +139,19 @@ export async function getServerSideProps() {
   try {
     const res = await fetch("https://fakestoreapi.com/products");
 
-    console.log("Status:", res.status);
-    console.log("Content-Type:", res.headers.get("content-type"));
-
-    const text = await res.text();
-
-    console.log("Response:");
-    console.log(text.substring(0, 500));
-
-    let products = [];
-
-    try {
-      products = JSON.parse(text);
-    } catch (e) {
-      console.error("JSON Parse Error:", e.message);
+    if (!res.ok) {
+      throw new Error(`HTTP Error: ${res.status}`);
     }
+
+    const products = await res.json();
 
     return {
       props: {
         products,
       },
     };
-  } catch (err) {
-    console.error("Fetch Error:", err);
+  } catch (error) {
+    console.error("Error fetching products:", error);
 
     return {
       props: {
