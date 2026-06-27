@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -35,9 +34,7 @@ export default function Home({ products }) {
     indexOfLastProduct
   );
 
-  const totalPages = Math.ceil(
-    filteredProducts.length / productsPerPage
-  );
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
   return (
     <>
@@ -68,9 +65,7 @@ export default function Home({ products }) {
                     >
                       <div
                         className="card h-100 shadow-sm"
-                        style={{
-                          cursor: "pointer",
-                        }}
+                        style={{ cursor: "pointer" }}
                       >
                         <img
                           src={product.image}
@@ -98,7 +93,7 @@ export default function Home({ products }) {
                   </div>
                 ))
               ) : (
-                <div className="text-center">
+                <div className="text-center mt-5">
                   <h3>No Products Found</h3>
                 </div>
               )}
@@ -109,9 +104,7 @@ export default function Home({ products }) {
                 <button
                   className="btn btn-outline-primary"
                   disabled={currentPage === 1}
-                  onClick={() =>
-                    setCurrentPage(currentPage - 1)
-                  }
+                  onClick={() => setCurrentPage(currentPage - 1)}
                 >
                   Previous
                 </button>
@@ -123,9 +116,7 @@ export default function Home({ products }) {
                 <button
                   className="btn btn-outline-primary"
                   disabled={currentPage === totalPages}
-                  onClick={() =>
-                    setCurrentPage(currentPage + 1)
-                  }
+                  onClick={() => setCurrentPage(currentPage + 1)}
                 >
                   Next
                 </button>
@@ -139,13 +130,13 @@ export default function Home({ products }) {
 }
 
 export async function getServerSideProps() {
-  const response = await axios.get(
-    "https://fakestoreapi.com/products"
-  );
+  const res = await fetch("https://fakestoreapi.com/products");
+
+  const products = await res.json();
 
   return {
     props: {
-      products: response.data,
+      products,
     },
   };
 }

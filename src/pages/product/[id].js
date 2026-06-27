@@ -1,4 +1,3 @@
-import axios from "axios";
 import Link from "next/link";
 
 export default function ProductDetails({ product }) {
@@ -35,8 +34,8 @@ export default function ProductDetails({ product }) {
             ${product.price}
           </h3>
 
-          <p>
-            ⭐ {product.rating.rate} ({product.rating.count} Reviews)
+          <p className="mt-3">
+            <strong>Rating:</strong> ⭐ {product.rating.rate}
           </p>
 
           <hr />
@@ -48,7 +47,6 @@ export default function ProductDetails({ product }) {
         </div>
 
       </div>
-
     </div>
   );
 }
@@ -56,13 +54,15 @@ export default function ProductDetails({ product }) {
 export async function getServerSideProps(context) {
   const { id } = context.params;
 
-  const response = await axios.get(
+  const res = await fetch(
     `https://fakestoreapi.com/products/${id}`
   );
 
+  const product = await res.json();
+
   return {
     props: {
-      product: response.data,
+      product,
     },
   };
 }
